@@ -1,5 +1,6 @@
 # app.py
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
+from flask_cors import CORS
 import os
 import selenium
 from selenium import webdriver
@@ -10,6 +11,7 @@ from scraper import FacebookMarketplaceScraper
 import threading
 
 app = Flask(__name__)
+CORS(app)  # Add this line after creating the Flask app
 app.secret_key = 'your-secret-key'  # Change this in production
 
 # Database setup
@@ -21,8 +23,18 @@ Session = sessionmaker(bind=engine)
 def index():
     session = Session()
     cars = session.query(Car).order_by(Car.created_at.desc()).all()
+    cars_list = [
+        {
+            'id': car.id,
+            'title': car.title,
+            'price': car.price,
+            'location': car.location,
+            'status': car.status,
+            'url': car.url
+        } for car in cars
+    ]
     session.close()
-    return render_template('index.html', cars=cars)
+    return jsonify({'cars': cars_list})
 
 @app.route('/add_car', methods=['POST'])
 def add_car():
