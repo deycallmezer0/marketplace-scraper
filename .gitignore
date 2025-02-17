@@ -1,0 +1,5 @@
+.env
+__pycache__/
+*.pyc
+facebook_cookies.pkl
+fb_cookies.json

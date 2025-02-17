@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Car Tracker</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>Car Tracker</h1>
+        
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-info">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Add New Car</h5>
+                <form action="{{ url_for('add_car') }}" method="POST">
+                    <div class="input-group">
+                        <input type="url" name="url" class="form-control" placeholder="Facebook Marketplace URL" required>
+                        <button type="submit" class="btn btn-primary">Add Car</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="row">
+            {% for car in cars %}
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ car.title }}</h5>
+                        <p class="card-text">
+                            <strong>Price:</strong> {{ car.price }}<br>
+                            <strong>Location:</strong> {{ car.location }}<br>
+                            <strong>Mileage:</strong> {{ car.mileage }}<br>
+                            <strong>Status:</strong> {{ car.status }}
+                        </p>
+                        
+                        <!-- Description Collapse Button -->
+                        <button class="btn btn-outline-secondary btn-sm mb-2" 
+                                type="button" 
+                                data-bs-toggle="collapse" 
+                                data-bs-target="#description-{{ car.id }}" 
+                                aria-expanded="false">
+                            Show Description
+                        </button>
+                        
+                        <!-- Collapsible Description -->
+                        <div class="collapse mb-3" id="description-{{ car.id }}">
+                            <div class="card card-body bg-light">
+                                {{ car.description }}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <form action="{{ url_for('update_status', car_id=car.id) }}" method="POST" class="d-inline">
+                                <select name="status" class="form-select d-inline-block w-auto" onchange="this.form.submit()">
+                                    <option value="Interested" {% if car.status == 'Interested' %}selected{% endif %}>Interested</option>
+                                    <option value="Contacted" {% if car.status == 'Contacted' %}selected{% endif %}>Contacted</option>
+                                    <option value="Viewed" {% if car.status == 'Viewed' %}selected{% endif %}>Viewed</option>
+                                    <option value="Rejected" {% if car.status == 'Rejected' %}selected{% endif %}>Rejected</option>
+                                </select>
+                            </form>
+                            <form action="{{ url_for('delete_car', car_id=car.id) }}" method="POST" class="d-inline">
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </div>
+                        <a href="{{ car.url }}" target="_blank" class="btn btn-primary btn-sm">View on Facebook</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
