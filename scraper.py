@@ -16,6 +16,10 @@ load_dotenv()
 
 class FacebookMarketplaceScraper:
     def __init__(self):
+        self._initialize_driver()
+        self.is_logged_in = False
+        
+    def _initialize_driver(self):
         chrome_options = Options()
         chrome_options.add_argument('--no-sandbox')
         chrome_options.add_argument('--headless')
@@ -27,6 +31,10 @@ class FacebookMarketplaceScraper:
         
     def random_delay(self):
         time.sleep(random.uniform(1, 3))
+    def ensure_logged_in(self):
+        if not self.is_logged_in:
+            self.is_logged_in = self.login_flow()
+        return self.is_logged_in
         
     def save_cookies(self):
         with open('facebook_cookies.pkl', 'wb') as f:
@@ -75,9 +83,11 @@ class FacebookMarketplaceScraper:
             return False
 
     def get_marketplace_item(self, item_url):
+        if not self.ensure_logged_in():
+            raise Exception("Failed to log in")
         try:
             self.driver.get(item_url)
-            time.sleep(5)
+            time.sleep(2)
 
             # Get title from browser title and clean it
             title = self.driver.title
