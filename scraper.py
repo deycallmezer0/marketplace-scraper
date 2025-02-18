@@ -137,6 +137,7 @@ class FacebookMarketplaceScraper:
             time.sleep(5)
 
             title = self.driver.title.replace("Marketplace - ", "")
+            title = title.replace(" | Facebook", "")
             print(f"Page title: {title}")
 
             try:
