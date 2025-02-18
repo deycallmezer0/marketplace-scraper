@@ -1,16 +1,15 @@
-// src/components/AddCarForm.js
-import React, { useState } from 'react';
+import { useState } from 'react'
 
 function AddCarForm({ onAdd }) {
-  const [url, setUrl] = useState('');
+  const [url, setUrl] = useState('')
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     if (url.trim()) {
-      onAdd(url);
-      setUrl('');
+      onAdd(url)
+      setUrl('')
     }
-  };
+  }
 
   return (
     <form onSubmit={handleSubmit} className="add-car-form">
@@ -22,7 +21,7 @@ function AddCarForm({ onAdd }) {
       />
       <button type="submit">Add Car</button>
     </form>
-  );
+  )
 }
 
-export default AddCarForm;
+export default AddCarForm
