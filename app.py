@@ -9,6 +9,21 @@ from sqlalchemy.orm import sessionmaker
 from models import Base, Car
 from scraper import FacebookMarketplaceScraper
 import threading
+import os
+import json
+import random
+import time
+from datetime import datetime
+from dotenv import load_dotenv
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+from webdriver_manager.chrome import ChromeDriverManager
+
+load_dotenv()
 
 app = Flask(__name__)
 CORS(app)  # Add this line after creating the Flask app
@@ -35,37 +50,50 @@ def index():
     ]
     session.close()
     return jsonify({'cars': cars_list})
-
 @app.route('/add_car', methods=['POST'])
 def add_car():
-    url = request.form.get('url')
+    data = request.get_json()  # Change this line
+    url = data.get('url') if data else None  # And this line
+    print(f'Received URL: {url}')
+    
     if not url:
+        print('No URL provided')
         flash('Please provide a URL')
         return redirect(url_for('index'))
     
     session = Session()
+    print('Adding car...')
     
     # Check if car already exists
     existing_car = session.query(Car).filter_by(url=url).first()
     if existing_car:
+        print(f'Car already exists: {url}')  # Add this
         flash('This car is already in your list')
         return redirect(url_for('index'))
     
     # Initialize scraper and get car data
+    print('Initializing scraper...')
     scraper = FacebookMarketplaceScraper()
     try:
+        print('Starting login flow...')  # Add this
         if scraper.login_flow():
+            print('Logged in successfully!')
+            print(f'Fetching car data for URL: {url}')  # Add this
             car_data = scraper.get_marketplace_item(url)
             if car_data:
+                print(f'Successfully retrieved car data: {car_data}')  # Add this
                 car = Car(**car_data)
                 session.add(car)
                 session.commit()
                 flash('Car added successfully!')
             else:
+                print('Failed to fetch car data')  # Add this
                 flash('Failed to fetch car data')
         else:
+            print('Failed to login to Facebook')  # Add this
             flash('Failed to login to Facebook')
     except Exception as e:
+        print(f'Error occurred: {str(e)}')  # Add this
         flash(f'Error: {str(e)}')
     finally:
         scraper.cleanup()
