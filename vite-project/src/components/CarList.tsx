@@ -23,7 +23,7 @@ const CarList: React.FC<CarListProps> = ({ cars, onUpdateStatus, onDelete }) => 
         <p>No cars found</p>
       ) : (
         cars.map((car) => (
-          <div key={car.id} className="car-item">
+          <div key={car.id} className="car-item space-y-4">
             <h3>{car.title}</h3>
             <p>Price: {car.price}</p>
             <p>Location: {car.location}</p>

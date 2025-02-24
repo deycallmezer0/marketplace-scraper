@@ -23,6 +23,9 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 
+
+#TODO Add AI functionality, pass the car data to the AI model, search for information about the car (e.g. mpg, reliability, etc.) and store it in the database, this can be referenced for cars added in the future with the same year, make, and model.
+
 load_dotenv()
 
 app = Flask(__name__)
