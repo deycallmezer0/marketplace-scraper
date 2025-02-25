@@ -128,6 +128,7 @@ class FacebookMarketplaceScraper:
     def get_marketplace_images(self, item_url, save_path=None):
         """
         Extracts and saves all images from a Facebook Marketplace listing.
+        Skips the first image as it's a duplicate of the second.
         
         Args:
             item_url (str): URL of the marketplace listing
@@ -148,18 +149,19 @@ class FacebookMarketplaceScraper:
             if save_path and not os.path.exists(save_path):
                 os.makedirs(save_path)
                 
-            for i, img in enumerate(img_elements):
+            # Skip first image (index 0) as it's a duplicate
+            for i, img in enumerate(img_elements[1:], start=1):
                 try:
                     # Extract the image URL from the src attribute
                     img_url = img.get_attribute("src")
                     if img_url:
                         image_urls.append(img_url)
-                        print(f"Image {i+1}: {img_url}")
+                        print(f"Image {i}: {img_url}")
                         
                         # Save the image if a save path is provided
                         if save_path:
                             # Create a filename based on listing and image index
-                            filename = f"image_{i+1}.jpg"
+                            filename = f"image_{i}.jpg"
                             file_path = os.path.join(save_path, filename)
                             
                             # Download and save the image
@@ -170,7 +172,7 @@ class FacebookMarketplaceScraper:
                             print(f"Saved image to {file_path}")
                     
                 except Exception as e:
-                    print(f"Error processing image {i+1}: {str(e)}")
+                    print(f"Error processing image {i}: {str(e)}")
             
             return image_urls
             
