@@ -11,7 +11,6 @@ function App() {
   const [cars, setCars] = useState<Car[]>([]);
   const [selectedCar, setSelectedCar] = useState<Car | null>(null);
   const [isAddingCar, setIsAddingCar] = useState<boolean>(false);
-  const [addingTasks, setAddingTasks] = useState<{[key: string]: any}>({});
   useEffect(() => {
     fetchCars();
   }, []);
@@ -102,6 +101,8 @@ const pollTaskStatus = async (taskId: string) => {
   const loadingCar: Car = {
     id: 'loading',
     url: '',
+    location: '',
+    images: [],
     title: 'Adding new car...',
     price: 0,
     status: 'loading',
@@ -151,7 +152,8 @@ const pollTaskStatus = async (taskId: string) => {
         {/* Filters and sorting options */}
         <div className="mb-6 flex justify-between items-center">
           <div className="flex gap-4">
-            <select className="rounded-md border-gray-300 shadow-sm">
+            <select className="rounded-md border-gray-300 shadow-sm"
+            aria-label='Filter by status'>
               <option value="">All Statuses</option>
               <option value="new">New</option>
               <option value="contacted">Contacted</option>
@@ -159,7 +161,8 @@ const pollTaskStatus = async (taskId: string) => {
               <option value="negotiating">Negotiating</option>
               <option value="completed">Completed</option>
             </select>
-            <select className="rounded-md border-gray-300 shadow-sm">
+            <select className="rounded-md border-gray-300 shadow-sm"
+            aria-label='Sort by'>
               <option value="newest">Newest First</option>
               <option value="price-low">Price: Low to High</option>
               <option value="price-high">Price: High to Low</option>

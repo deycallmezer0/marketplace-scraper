@@ -129,6 +129,7 @@ const CarList: React.FC<CarListProps> = ({ cars, onUpdateStatus, onDelete, onVie
                     className="rounded-md border-gray-300 shadow-sm text-sm"
                     value={car.status}
                     onChange={(e) => onUpdateStatus(car.id, e.target.value)}
+                    aria-label="Update car status"
                   >
                     <option value="new">New</option>
                     <option value="contacted">Contacted</option>
