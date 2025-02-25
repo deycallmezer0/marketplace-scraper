@@ -1,7 +1,10 @@
 /* src/index.css */
+
+@custom-variant dark (&:is(.dark *));
 @import "tailwindcss";
 
 /* src/index.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+

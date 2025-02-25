@@ -5,7 +5,15 @@ import AddCarForm from './components/AddCarForm'
 import CarDetailModal from './components/CarDetailModal'
 import './App.css'
 import { Car } from './types'
-import TestComponent from './components/TestComponent'
+import { Input } from "@/components/ui/input"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+
 function App() {
   // State for cars, typed with an array of Car objects
   const [cars, setCars] = useState<Car[]>([]);
@@ -136,7 +144,7 @@ const pollTaskStatus = async (taskId: string) => {
       <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
-            <h1 className="text-2xl font-bold text-gray-900">Car Tracker</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Marketplace Car Helper</h1>
             <div className="flex">
               {/* Navigation items could go here */}
             </div>
@@ -152,26 +160,23 @@ const pollTaskStatus = async (taskId: string) => {
         {/* Filters and sorting options */}
         <div className="mb-6 flex justify-between items-center">
           <div className="flex gap-4">
-            <select className="rounded-md border-gray-300 shadow-sm"
-            aria-label='Filter by status'>
-              <option value="">All Statuses</option>
-              <option value="new">New</option>
-              <option value="contacted">Contacted</option>
-              <option value="viewed">Viewed</option>
-              <option value="negotiating">Negotiating</option>
-              <option value="completed">Completed</option>
-            </select>
-            <select className="rounded-md border-gray-300 shadow-sm"
-            aria-label='Sort by'>
-              <option value="newest">Newest First</option>
-              <option value="price-low">Price: Low to High</option>
-              <option value="price-high">Price: High to Low</option>
-            </select>
+           <Select className="w-48">
+            <SelectTrigger>
+              <SelectValue placeholder="Sort by" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="price">Price</SelectItem>
+              <SelectItem value="location">Location</SelectItem>
+              <SelectItem value="time_posted">Time Posted</SelectItem>
+            </SelectContent>
+          </Select>
+          
           </div>
-          <input 
+          <Input 
             type="search" 
             placeholder="Search cars..." 
-            className="rounded-md border-gray-300 shadow-sm"
+            className="w-96"
+            aria-label="Search cars"
           />
         </div>
         
