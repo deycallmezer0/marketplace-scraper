@@ -219,6 +219,31 @@ def update_status(car_id):
         session.close()
     return redirect(url_for('index'))
 
+def generate_report(car_id, car_details):
+    print(f'Generating report for car: {car_id} in a new thread')
+    print(car_details)
+    return True
+@app.route('/report_car', methods=['POST'])
+def report_car():
+    payload = request.get_json()
+    car_id = payload.get('car_id')
+    print(f'Received request to generate report for car: {car_id}')
+    session = Session()
+    print(session)
+    car = session.query(Car).get(car_id)
+    if car:
+        car_details = {
+            'title': car.title,
+            'price': car.price,
+            'location': car.location,
+            'time_posted': car.time_posted,
+            'description': car.description,
+            'about': car.about,
+            'images': car.images,
+        }
+        session.close()
+        generate_report(car_id, car_details)
+        flash('Report generated successfully!')
 @app.route('/delete_car/<car_id>', methods=['POST'])
 def delete_car(car_id):
     print('Received request to delete car with ID:', car_id)

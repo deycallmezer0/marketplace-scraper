@@ -1,5 +1,7 @@
 import React from 'react';
 import { Car } from '../types';
+import axios from 'axios'
+import { c } from 'node_modules/vite/dist/node/moduleRunnerTransport.d-CXw_Ws6P';
 
 interface CarDetailModalProps {
   car: Car | null;
@@ -8,7 +10,19 @@ interface CarDetailModalProps {
 
 const CarDetailModal: React.FC<CarDetailModalProps> = ({ car, onClose }) => {
   if (!car) return null;
-  
+  const generateReport = async (car_id: string) => {
+    try {
+        const response = await axios.post('http://localhost:5000/report_car', { car_id }, {
+            headers: { 'Content-Type': 'application/json' }
+        });
+        
+        console.log('Report generated:', response.data);
+    } catch (error) {
+        console.error('Error generating report', error);
+  }
+}
+
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
@@ -89,6 +103,14 @@ const CarDetailModal: React.FC<CarDetailModalProps> = ({ car, onClose }) => {
               className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
             >
               View on Facebook
+            </button>
+          </div>
+          <div className="mt-8 pt-4 border-t flex justify-end gap-3">
+            <button
+              onClick={() => generateReport(car.id)}
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            >
+              Generate Report
             </button>
           </div>
         </div>

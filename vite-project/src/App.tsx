@@ -160,7 +160,7 @@ const pollTaskStatus = async (taskId: string) => {
         {/* Filters and sorting options */}
         <div className="mb-6 flex justify-between items-center">
           <div className="flex gap-4">
-           <Select className="w-48">
+           <Select>
             <SelectTrigger>
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
